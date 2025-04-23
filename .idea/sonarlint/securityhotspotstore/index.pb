@@ -9,3 +9,7 @@ S
 #contracts/performance-criteria.clar,2/d/2da8f57fbccaad85b29ee7f3cc2240984d497c68
 R
 "tests/performance-criteria.test.ts,b/9/b930cf0988b446040142687109af9c9a98e1bfd9
+T
+$contracts/supplier-verification.clar,1/e/1eeafa16bd5f2c0aa8a2cf22d6d886e3463492c6
+S
+#tests/supplier-verification.test.ts,1/3/137832f501dab1372390b8c0c1f565fff2cae64d

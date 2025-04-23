@@ -1,30 +1,52 @@
+;; Supplier Verification Contract
+;; Validates legitimate component providers
 
-;; title: supplier-verification
-;; version:
-;; summary:
-;; description:
+(define-data-var admin principal tx-sender)
 
-;; traits
-;;
+;; Supplier status: 1 = verified, 0 = unverified
+(define-map suppliers principal uint)
 
-;; token definitions
-;;
+;; Get verification status for a supplier
+(define-read-only (get-supplier-status (supplier principal))
+  (default-to u0 (map-get? suppliers supplier))
+)
 
-;; constants
-;;
+;; Check if a supplier is verified
+(define-read-only (is-verified (supplier principal))
+  (is-eq (get-supplier-status supplier) u1)
+)
 
-;; data vars
-;;
+;; Restrict function to admin only
+(define-private (check-admin)
+  (begin
+    (asserts! (is-eq tx-sender (var-get admin)) (err u403))
+    (ok true)
+  )
+)
 
-;; data maps
-;;
+;; Verify a supplier
+(define-public (verify-supplier (supplier principal))
+  (begin
+    (try! (check-admin))
+    (map-set suppliers supplier u1)
+    (ok true)
+  )
+)
 
-;; public functions
-;;
+;; Revoke a supplier's verification
+(define-public (revoke-supplier (supplier principal))
+  (begin
+    (try! (check-admin))
+    (map-set suppliers supplier u0)
+    (ok true)
+  )
+)
 
-;; read only functions
-;;
-
-;; private functions
-;;
-
+;; Transfer admin rights
+(define-public (set-admin (new-admin principal))
+  (begin
+    (try! (check-admin))
+    (var-set admin new-admin)
+    (ok true)
+  )
+)
